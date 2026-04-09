@@ -10,6 +10,12 @@ import pygetwindow as gw
 from datetime import datetime
 
 users = ["pushkal.png", "kahlen.png", "encheng.png", "junwei.png", "kalvin.png"]
+searchbar_position = (1533, 98)
+message_icon_top_left = (1412, 662)
+message_icon_bottom_right = (1694, 871)
+textbox_position = (1470, 1315)
+
+trigger_now = False
 
 def enable_dpi_awareness():
     try:
@@ -83,24 +89,24 @@ def locate_image_on_virtual_screen(image_path, confidence=0.8):
     }
 
 
-triggered = False
+
 def main():
+    triggered = False
     while True:
 
         now = datetime.now()
-        if now.hour == 0 and now.minute == 0:
+        if (now.hour == 0 and now.minute == 0) or trigger_now:
             if not triggered:
 
                 windows = gw.getWindowsWithTitle("Chrome")
                 if windows:
                     windows[0].activate()
 
-                pyautogui.click(5074, 2753)
                 pyautogui.hotkey('ctrl', 't')
 
                 time.sleep(0.5)
 
-                pyautogui.click(5302, 1387)
+                pyautogui.click(searchbar_position)
 
                 pyautogui.typewrite("https://www.tiktok.com/messages?lang=en")
                 pyautogui.press('enter')
@@ -110,7 +116,7 @@ def main():
 
                 while True:
                     time.sleep(0.3)
-                    output = screenshot_region((4709, 1700), (4907, 1871))
+                    output = screenshot_region(message_icon_top_left, message_icon_bottom_right)
                     output_gray = cv2.cvtColor(cv2.imread(output), cv2.COLOR_BGR2GRAY)
                     similarity = ssim(output_gray, message_icon_gray)
                     if similarity > 0.9:
@@ -120,10 +126,16 @@ def main():
                 
                 for user in users:
                     image_path = "images\\" + user
-                    click_point, match = locate_image_on_virtual_screen(image_path, confidence=0.8)
+
+                    while True:
+                        try:
+                            click_point, match = locate_image_on_virtual_screen(image_path, confidence=0.8)
+                            break
+                        except pyautogui.ImageNotFoundException:
+                            time.sleep(0.5)
                     pyautogui.click(click_point[0], click_point[1])
                 
-                    pyautogui.click(5614, 2788)
+                    pyautogui.click(textbox_position)
                     pyautogui.typewrite("Nig")
 
                     pyautogui.press('enter')
