@@ -144,10 +144,10 @@ def main():
                 
                 pyautogui.hotkey('ctrl', 'w')
                 triggered = True
-            else:
-                triggered = False
+        else:
+            triggered = False
             
-            time.sleep(1)
+        time.sleep(1)
 
 
 if __name__ == "__main__":
