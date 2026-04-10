@@ -97,6 +97,7 @@ def main():
         now = datetime.now()
         if (now.hour == 0 and now.minute == 0) or trigger_now:
             if not triggered:
+                print("Triggering the script...")
 
                 windows = gw.getWindowsWithTitle("Chrome")
                 if windows:
