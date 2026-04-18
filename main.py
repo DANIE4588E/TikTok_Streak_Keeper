@@ -11,11 +11,11 @@ from datetime import datetime
 
 users = ["pushkal.png", "kahlen.png", "encheng.png", "junwei.png", "kalvin.png"]
 searchbar_position = (1533, 98)
-message_icon_top_left = (1412, 662)
-message_icon_bottom_right = (1694, 871)
+message_icon_top_left = (1477, 652)
+message_icon_bottom_right = (1682, 859)
 textbox_position = (1470, 1315)
 
-trigger_now = False
+trigger_now = True
 
 def enable_dpi_awareness():
     try:
@@ -116,14 +116,15 @@ def main():
                 message_icon_gray = cv2.cvtColor(message_icon_img, cv2.COLOR_BGR2GRAY)
 
                 while True:
-                    time.sleep(0.3)
+                    print("Waiting for the messages page to load...")
+                    time.sleep(1)
                     output = screenshot_region(message_icon_top_left, message_icon_bottom_right)
                     output_gray = cv2.cvtColor(cv2.imread(output), cv2.COLOR_BGR2GRAY)
                     similarity = ssim(output_gray, message_icon_gray)
-                    if similarity > 0.9:
+                    if similarity > 0.8:
                         break
 
-                time.sleep(2)
+                time.sleep(4)
                 
                 for user in users:
                     image_path = "images\\" + user
@@ -131,8 +132,10 @@ def main():
                     while True:
                         try:
                             click_point, match = locate_image_on_virtual_screen(image_path, confidence=0.8)
+                            print(f"Found {user} with confidence {match['confidence']:.3f} at {click_point}")
                             break
                         except pyautogui.ImageNotFoundException:
+                            print(f"Could not find {user}, retrying...")
                             time.sleep(0.5)
                     pyautogui.click(click_point[0], click_point[1])
                 
