@@ -9,13 +9,13 @@ from skimage.metrics import structural_similarity as ssim
 import pygetwindow as gw
 from datetime import datetime
 
-users = ["pushkal.png", "kahlen.png", "encheng.png", "junwei.png", "kalvin.png"]
+users = ["pushkal.png", "kahlen.png", "encheng.png", "junwei.png", "kalvin.png", "javian.png", "lyy.png"]
 searchbar_position = (1533, 98)
 message_icon_top_left = (1477, 652)
 message_icon_bottom_right = (1682, 859)
 textbox_position = (1470, 1315)
 
-trigger_now = True
+trigger_now = False
 
 def enable_dpi_awareness():
     try:
@@ -138,10 +138,11 @@ def main():
                             print(f"Could not find {user}, retrying...")
                             time.sleep(0.5)
                     pyautogui.click(click_point[0], click_point[1])
-                
+                    time.sleep(0.5)
                     pyautogui.click(textbox_position)
+                    time.sleep(0.5)
                     pyautogui.typewrite("Nig")
-
+                    time.sleep(0.5)
                     pyautogui.press('enter')
 
                     time.sleep(0.5)
